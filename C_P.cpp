@@ -143,6 +143,6 @@ vector<int> find_point(int num, point_set t) {
     while (y == x) {
         y = u(e);
     }
-    return localSearch(crossover(t.a[x], t.a[y]));
+    return localSearch(crossover(t.a[x], t.a[y]),L_LS);
 }
 
