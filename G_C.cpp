@@ -18,25 +18,25 @@ namespace G_C {
                 book_point.push_back(j);
             P[i].size = 0;
             for (int j = 1; j <= p; j++) {
-                int t = rand() % book_point.size();
+                int t = rand(0, (int) book_point.size());
                 int x = choose_point[book_point[t]];
                 book_point.erase(book_point.begin() + t);
                 memset(vispoint, 0, sizeof(vispoint));
                 for (int k = head[x], y; k; k = e[k].next) {
                     y = e[k].go;
-                    vispoint[y] = 1;
+                    vispoint[y] = true;
                 }
                 int flag = 0;
-                for (int k = 1; k <= P[i].size; k++) {
+                for (auto k:P[i].v) {
                     int flaggro = 0;
-                    for (int t = 0; t < P[i].v[k].a.size(); t++) {
-                        if (vispoint[P[i].v[k].a[t]]) {
+                    for (auto q:k.a) {
+                        if (vispoint[q]) {
                             flaggro = 1;
                             break;
                         }
                     }
                     if (!flaggro) {
-                        P[i].v[k].a.push_back(x);
+                        k.a.push_back(x);
                         flag = 1;
                         break;
                     }
@@ -46,7 +46,7 @@ namespace G_C {
                         P[i].size++;
                         P[i].v[P[i].size].a.push_back(x);
                     } else {
-                        int to_pri = rand() % lim + 1;
+                        int to_pri = rand(1, lim);
                         P[i].v[to_pri].a.push_back(x);
                     }
                 }
@@ -65,13 +65,13 @@ namespace G_C {
             if (i % 2 == 1) {
                 for (int j = 1; j <= s1.size; j++)
                     if (s1.v[j].a.size() > maxnum) {
-                        maxnum = s1.v[j].a.size();
+                        maxnum = (int) s1.v[j].a.size();
                         maxid = j;
                     }
                 s.v[i].a.swap(s1.v[maxid].a);
-                for (int j = 0; j < s.v[i].a.size(); j++) {
-                    book[s.v[i].a[j]] = 1;
-                    book_point[s.v[i].a[j]] = 1;
+                for (auto j:s.v[i].a) {
+                    book[j] = 1;
+                    book_point[j] = 1;
                 }
                 gene news2;
                 for (int j = 1; j <= s2.size; j++) {
@@ -83,13 +83,13 @@ namespace G_C {
             } else {
                 for (int j = 1; j <= s2.size; j++)
                     if (s2.v[j].a.size() > maxnum) {
-                        maxnum = s2.v[j].a.size();
+                        maxnum = (int) s2.v[j].a.size();
                         maxid = j;
                     }
                 s.v[i].a.swap(s2.v[maxid].a);
-                for (int j = 0; j < s.v[i].a.size(); j++) {
-                    book[s.v[i].a[j]] = 1;
-                    book_point[s.v[i].a[j]] = 1;
+                for (auto j:s.v[i].a) {
+                    book[j] = 1;
+                    book_point[j] = 1;
                 }
                 gene news1;
                 for (int j = 1; j <= s1.size; j++) {
@@ -102,7 +102,7 @@ namespace G_C {
         }
         for (int i = 1; i <= p; i++)
             if (!book_point[choose_point[i]]) {
-                int x = rand() % s.size + 1;
+                int x = rand(1, s.size);
                 s.v[x].a.push_back(choose_point[i]);
             }
     }
@@ -115,8 +115,8 @@ namespace G_C {
         for (int i = 1; i <= p2; i++)
             for (int j = head[choose_point[i]]; j; j = e[j].next)
                 if (color[e[j].go] == color[choose_point[i]])
-                    return 0;
-        return 1;
+                    return false;
+        return true;
     }
 
     int f(gene p) {
@@ -161,7 +161,7 @@ namespace G_C {
         memset(tabutable, 0x3f, sizeof(tabutable));
         while (iter--) {
             int tl, new_pri = -1, new_pri_f = n * n;
-            tl = rand() % A + arf * nb_CFL;
+            tl = rand(0, A) + (int) (arf * nb_CFL);
             int color_change, rec_id = 1;
             for (int i = 1; i <= p2; i++)
                 if (conflict_number[choose_point[i]].sum > 0) {
@@ -217,9 +217,9 @@ namespace G_C {
         for (int i = 1; i <= s.size; i++) {
             int rec_num[maxn], max_rec = 0;
             memset(rec_num, 0, sizeof(rec_num));
-            for (int j = 0; j < s.v[i].a.size(); j++) {
-                rec_num[color[s.v[i].a[j]]]++;
-                max_rec = max(max_rec, rec_num[color[s.v[i].a[j]]]);
+            for (auto j:s.v[i].a) {
+                rec_num[color[j]]++;
+                max_rec = max(max_rec, rec_num[color[j]]);
             }
             sum += max_rec;
         }

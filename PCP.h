@@ -15,6 +15,7 @@
 #include <ctime>
 #include <cmath>
 #include <random>
+#include <algorithm>
 
 #define inf (int)1e9
 #define maxn 2005
@@ -34,12 +35,19 @@ struct edge {
 
 struct grou {
     vector<int> a;
+
+    grou() {
+        a.clear();
+    };
 };
 
 struct gene {
     int size;
     grou v[maxn];
-    //gene(){size=0;}
+
+    gene() {
+        size = 0;
+    }
 } P[30], ans_p;
 
 struct rec_point {
@@ -52,5 +60,18 @@ int tabutable[maxn][maxn], conflict_color[maxn][maxn];
 int head[maxn], p_color_point[maxp], pro[maxn], book_color[maxn];
 vector<int> choose_point;
 vector<int> con_p[maxp];
-default_random_engine e_engine(static_cast<unsigned int>( time(nullptr) ) );
+
+void swap(int a, int b) {
+    a ^= b;
+    b ^= a;
+    a ^= b;
+}
+
+int rand(int a, int b) {
+    if (a < b)swap(a, b);
+    default_random_engine e_engine(static_cast<unsigned int>(time(nullptr)));
+    uniform_int_distribution<int> u(a, b);
+    return u(e);
+}
+
 #endif //HYBIRD_PCP_H

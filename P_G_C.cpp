@@ -10,10 +10,8 @@ namespace P_P {
     void init_point(int size, vector<int> *b, int num) {
         PP.size = size;
         while (size--) {
-            for (int i = 1; i <= num; i++) {
-                uniform_int_distribution<unsigned long> u(1, b[i].size());
-                PP.a[size].push_back(b[i][u(e_engine)]);
-            }
+            for (int i = 1; i <= num; i++)
+                PP.a[size].push_back(b[i][rand(1, (int) b[i].size())]);
         }
     }
 
@@ -92,8 +90,7 @@ namespace P_P {
             choose_point[i] = true;
         while (iter--) {
             int tl, new_pri = -1, new_pri_f = 0;
-            uniform_int_distribution<int> u(0, A);
-            tl = u(e_engine) + (int)(arf * best_fun);
+            tl = rand(0, A) + (int) (arf * best_fun);
             for (int i = 1; i <= n; i++)
                 if (!choose_point[i] && tabutable[i] >= iter) {
                     int cnt = 0;

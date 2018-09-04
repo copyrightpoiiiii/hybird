@@ -64,8 +64,8 @@ bool check(int x) {
             }
         int good_answer = p * p;
         while (stop_cond--) {
-            uniform_int_distribution<int> u(1, init_size);
-            int p1 = u(e_engine), p2 =  u(e_engine);
+
+            int p1 = rand(1, init_size), p2 = rand(1, init_size);
             gene ps;
             G_C::crossover(P[p1], P[p2], ps);
             G_C::localSearch(ps, L_LS);
@@ -92,7 +92,6 @@ int main() {
     ios_base::sync_with_stdio(false);
     freopen("input.pcp", "r", stdin);
     freopen("output.txt", "w", stdout);
-    e_engine.seed((unsigned) time(nullptr));
     init();
     P_P::init_point(init_size, con_p, p);
     //int l = 1, r = p;

@@ -13,7 +13,8 @@
 struct point_set {
     int size;
     vector<int> a[maxn];
-    //point_set(){size=0;}
+
+    point_set() { size = 0; }
 } PP;
 
 namespace P_P {
