@@ -26,11 +26,11 @@ namespace C_P {
 
     void localSearch(vector<int> *a, int iter);
 
-    int dis(gene s, gene t);
+    int dis(vector<int> s, vector<int> t);
 
     void optimize();
 
-    void find_point(vector<int> *a, int num,point_set t);
+    vector<int> find_point(vector<int> *a, int num,point_set t);
 
 
 }

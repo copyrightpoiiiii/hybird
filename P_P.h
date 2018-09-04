@@ -22,12 +22,5 @@ namespace P_P {
 
     void optimize();
 
-    int find_change_point(int *a, int x);
-
-    int find_change_point_real(int *a, int x);
-
-    void choose_all_point(int *a, int mode);
-
-    bool check(int x);
 }
 #endif //HYBIRD_P_P_H
