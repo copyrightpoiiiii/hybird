@@ -7,8 +7,8 @@
 #ifndef HYBIRD_CHANGE_PINT_H
 #define HYBIRD_CHANGE_PINT_H
 
-
 #include "PCP.h"
+
 
 struct point_set {
     int size;

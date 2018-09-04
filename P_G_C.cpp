@@ -82,7 +82,7 @@ namespace P_P {
     }
 
     vector<int> localSearch(vector<int> a, int iter) {
-        vector best_point = a;
+        vector<int> best_point = a;
         int best_fun = find(a);
         int tabutable[maxn];
         memset(tabutable, 0x3f, sizeof(tabutable));

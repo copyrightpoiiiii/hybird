@@ -71,7 +71,7 @@ int rand(int a, int b) {
     if (a < b)swap(a, b);
     default_random_engine e_engine(static_cast<unsigned int>(time(nullptr)));
     uniform_int_distribution<int> u(a, b);
-    return u(e);
+    return u(e_engine);
 }
 
 #endif //HYBIRD_PCP_H

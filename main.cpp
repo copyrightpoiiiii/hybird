@@ -1,5 +1,6 @@
 #include "P_G_C.h"
 #include "G_C.h"
+#include "PCP.h"
 
 int read() {
     int x = 0, f = 1;
@@ -64,7 +65,6 @@ bool check(int x) {
             }
         int good_answer = p * p;
         while (stop_cond--) {
-
             int p1 = rand(1, init_size), p2 = rand(1, init_size);
             gene ps;
             G_C::crossover(P[p1], P[p2], ps);

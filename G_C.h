@@ -1,10 +1,13 @@
 //
 // Created by 张淇 on 2018/9/2.
 //
-#include "PCP.h"
+
 
 #ifndef HYBIRD_P_P_H
 #define HYBIRD_P_P_H
+
+#include "PCP.h"
+
 namespace G_C {
     void init_gen(int lim, int size);
 
