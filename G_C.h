@@ -5,8 +5,8 @@
 
 #ifndef HYBIRD_P_P_H
 #define HYBIRD_P_P_H
-namespace P_P {
-    void init_gen(int lim, const int size);
+namespace G_C {
+    void init_gen(int lim, int size);
 
     void crossover(gene s1, gene s2, gene &s);
 

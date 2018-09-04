@@ -1,10 +1,10 @@
 //
 // Created by 张淇 on 2018/9/2.
 //
-#include "P_P.h"
+#include "G_C.h"
 
-namespace P_P {
-    void init_gen(int lim, const int size) {
+namespace G_C {
+    void init_gen(int lim, int size) {
         for (int i = 1; i <= gene_size; i++) {
             for (int j = 1; j <= P[i].size; j++)
                 P[i].v[j].a.clear();

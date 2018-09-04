@@ -2,28 +2,22 @@
 // Created by 张淇 on 2018/8/31.
 //
 
-#include "C_P.h"
+#include "P_G_C.h"
 
 int book_conflict[maxn];
 
-//using namespace C_P;
-namespace C_P {
+namespace P_P {
     void init_point(int size, vector<int> *b, int num) {
         PP.size = size;
         while (size--) {
             for (int i = 1; i <= num; i++) {
-                default_random_engine e;
-                e.seed((unsigned) time(0));
                 uniform_int_distribution<unsigned long> u(1, b[i].size());
-                PP.a[size].push_back(b[i][u(e)]);
+                PP.a[size].push_back(b[i][u(e_engine)]);
             }
         }
     }
 
     vector<int> crossover(vector<int> x, vector<int> y) {
-        default_random_engine e1;
-        e1.seed((unsigned) time(NULL));
-        uniform_int_distribution<bool> u(false, true);
         bool choose[maxn];
         int choose_side = 0;
         memset(choose, 0, sizeof(choose));
@@ -74,14 +68,15 @@ namespace C_P {
 
     int find(vector<int> a) {
         int sum = 0;
+        bool choose_point[maxn];
         memset(choose_point, 0, sizeof(choose_point));
         memset(book_conflict, 0, sizeof(book_conflict));
-        for (int i = 0; i < a.size(); i++)
-            choose_point[a[i]] = true;
-        for (int j = 0; j < a.size(); j++)
-            for (int i = head[a[j]]; i; i = e[i].next)
+        for (auto i:a)
+            choose_point[i] = true;
+        for (auto j:a)
+            for (int i = head[j]; i; i = e[i].next)
                 if (choose_point[e[i].go]) {
-                    book_conflict[pro[a[j]]]++;
+                    book_conflict[pro[j]]++;
                     book_conflict[pro[e[i].go]]++;
                     sum++;
                 }
@@ -93,11 +88,12 @@ namespace C_P {
         int best_fun = find(a);
         int tabutable[maxn];
         memset(tabutable, 0x3f, sizeof(tabutable));
-        for (int i = 0; i < a.size(); i++)
-            choose_point[a[i]] = true;
+        for (auto i:a)
+            choose_point[i] = true;
         while (iter--) {
             int tl, new_pri = -1, new_pri_f = 0;
-            tl = rand() % A + arf * best_fun;
+            uniform_int_distribution<int> u(0, A);
+            tl = u(e_engine) + (int)(arf * best_fun);
             for (int i = 1; i <= n; i++)
                 if (!choose_point[i] && tabutable[i] >= iter) {
                     int cnt = 0;
@@ -112,21 +108,21 @@ namespace C_P {
             if (new_pri == -1)
                 return best_point;
             else {
-                for (int i = 0; i < a.size(); i++)
-                    if (pro[a[i]] == pro[new_pri]) {
+                for (auto i:a)
+                    if (pro[i] == pro[new_pri]) {
                         for (int j = head[a[i]]; j; j = e[j].next)
                             if (choose_point[e[j].go]) {
                                 best_fun--;
                                 book_conflict[pro[e[j].go]]--;
                             }
-                        book_conflict[pro[a[i]]] = 0;
+                        book_conflict[pro[i]] = 0;
                         for (int j = head[new_pri]; j; j = e[j].next)
                             if (choose_point[e[j].go]) {
                                 best_fun--;
                                 book_conflict[pro[e[j].go]]++;
                                 book_conflict[pro[new_pri]]++;
                             }
-                        tabutable[a[i]] = iter - tl;
+                        tabutable[i] = iter - tl;
                     }
             }
         }
@@ -150,7 +146,7 @@ namespace C_P {
         for (int i = 1; i <= PP.size; i++)
             for (int j = 1; j <= PP.size; j++)
                 if (i != j)
-                    min_dis[i] = min(min_dis[i], C_P::dis(PP.a[i], PP.a[j]));
+                    min_dis[i] = min(min_dis[i], dis(PP.a[i], PP.a[j]));
         long double max_index = 0;
         int max_id = PP.size;
         for (int i = 1; i <= PP.size; i++) {
@@ -164,15 +160,15 @@ namespace C_P {
         PP.size--;
     }
 
-    vector<int> find_point(int num, point_set t) {
+    vector<int> find_point(int num) {
         default_random_engine e;
-        e.seed((unsigned) time(NULL));
-        uniform_int_distribution<int> u(1, t.size);
+        e.seed((unsigned) time(nullptr));
+        uniform_int_distribution<int> u(1, PP.size);
         int x = u(e), y = u(e);
         while (y == x) {
             y = u(e);
         }
-        PP.a[++PP.size] = localSearch(crossover(t.a[x], t.a[y]), L_LS);
+        PP.a[++PP.size] = localSearch(crossover(PP.a[x], PP.a[y]), L_LS);
         vector<int> tmp = PP.a[PP.size];
         optimize();
         return tmp;

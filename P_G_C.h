@@ -13,12 +13,13 @@
 struct point_set {
     int size;
     vector<int> a[maxn];
+    //point_set(){size=0;}
 } PP;
 
-namespace C_P {
+namespace P_P {
 
 
-    void init_point(int size, gene p, vector<int> *b, int num);
+    void init_point(int size, vector<int> *b, int num);
 
     void crossover(vector<int> x, vector<int> y, vector<int> *p);
 
@@ -30,7 +31,7 @@ namespace C_P {
 
     void optimize();
 
-    vector<int> find_point(vector<int> *a, int num,point_set t);
+    vector<int> find_point(int num);
 
 
 }

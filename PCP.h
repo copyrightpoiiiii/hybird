@@ -16,7 +16,7 @@
 #include <cmath>
 #include <random>
 
-#define inf 1e9
+#define inf (int)1e9
 #define maxn 2005
 #define maxp 2005
 #define maxm 400005
@@ -39,6 +39,7 @@ struct grou {
 struct gene {
     int size;
     grou v[maxn];
+    //gene(){size=0;}
 } P[30], ans_p;
 
 struct rec_point {
@@ -46,15 +47,10 @@ struct rec_point {
 } conflict_number[maxn];
 
 
-
-int nb_CFL;
-int tabutable[maxn][maxn];
-int p_tabutable[maxp][maxn];
-int head[maxn], tot, m, n, p, p2, gene_size, color_size;
-int conflict_color[maxn][maxn];
-int p_color_point[maxp];
-int pro[maxn], book_color[maxn];
-int choose_point[maxp];
-bool point_choose[maxn];
+int nb_CFL, tot, m, n, p, p2, gene_size, color_size;
+int tabutable[maxn][maxn], conflict_color[maxn][maxn];
+int head[maxn], p_color_point[maxp], pro[maxn], book_color[maxn];
+vector<int> choose_point;
 vector<int> con_p[maxp];
+default_random_engine e_engine(static_cast<unsigned int>( time(nullptr) ) );
 #endif //HYBIRD_PCP_H
