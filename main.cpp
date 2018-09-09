@@ -1,6 +1,16 @@
-#include "P_G_C.h"
-#include "G_C.h"
 #include "PCP.h"
+#include "G_C.h"
+#include "P_G_C.h"
+
+rec_point conflict_number[maxn];
+edge e[2 * maxm];
+gene P[30], ans_p;
+int nb_CFL, tot, m, n, p, p2, gene_size, color_size;
+int tabutable[maxn][maxn], conflict_color[maxn][maxn];
+int head[maxn], p_color_point[maxp], pro[maxn], book_color[maxn];
+vector<int> choose_point;
+vector<int> con_p[maxp];
+point_set PP;
 
 int read() {
     int x = 0, f = 1;
@@ -14,6 +24,19 @@ int read() {
         ch = getchar();
     }
     return x * f;
+}
+
+void swap(int a, int b) {
+    a ^= b;
+    b ^= a;
+    a ^= b;
+}
+
+int rand(int a, int b) {
+    if (a < b)swap(a, b);
+    default_random_engine e_engine(static_cast<unsigned int>(time(nullptr)));
+    uniform_int_distribution<int> u(a, b);
+    return u(e_engine);
 }
 
 void insert(int u, int v) {

@@ -9,13 +9,17 @@
 
 #include "PCP.h"
 
+extern point_set PP;
+extern rec_point conflict_number[maxn];
+extern edge e[2 * maxm];
+extern gene P[30], ans_p;
+extern int nb_CFL, tot, m, n, p, p2, gene_size, color_size;
+extern int tabutable[maxn][maxn], conflict_color[maxn][maxn];
+extern int head[maxn], p_color_point[maxp], pro[maxn], book_color[maxn];
+extern vector<int> choose_point;
+extern vector<int> con_p[maxp];
 
-struct point_set {
-    int size;
-    vector<int> a[maxn];
-
-    point_set() { size = 0; }
-} PP;
+extern int rand(int a, int b);
 
 namespace P_P {
 

@@ -31,7 +31,7 @@ using namespace std;
 
 struct edge {
     int go, next;
-} e[2 * maxm];
+};
 
 struct grou {
     vector<int> a;
@@ -48,30 +48,17 @@ struct gene {
     gene() {
         size = 0;
     }
-} P[30], ans_p;
+};
 
 struct rec_point {
     int color, sum;
-} conflict_number[maxn];
+};
 
+struct point_set {
+    int size;
+    vector<int> a[maxn];
 
-int nb_CFL, tot, m, n, p, p2, gene_size, color_size;
-int tabutable[maxn][maxn], conflict_color[maxn][maxn];
-int head[maxn], p_color_point[maxp], pro[maxn], book_color[maxn];
-vector<int> choose_point;
-vector<int> con_p[maxp];
-
-void swap(int a, int b) {
-    a ^= b;
-    b ^= a;
-    a ^= b;
-}
-
-int rand(int a, int b) {
-    if (a < b)swap(a, b);
-    default_random_engine e_engine(static_cast<unsigned int>(time(nullptr)));
-    uniform_int_distribution<int> u(a, b);
-    return u(e_engine);
-}
+    point_set() { size = 0; }
+} ;
 
 #endif //HYBIRD_PCP_H
