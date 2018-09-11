@@ -79,7 +79,9 @@ bool check(int x) {
     int best_answer = p * p;
     while (stop_check--) {
         choose_point = P_P::find_point(p2);
+        cout<<"ss"<<endl;
         G_C::init_gen(x, init_size);
+        cout<<"ssss"<<endl;
         int stop_cond = L_check;
         for (int i = 1; i <= init_size; i++)
             if (G_C::judge(P[i])) {
@@ -95,17 +97,23 @@ bool check(int x) {
             int tmp = G_C::f(ps);
             good_answer = min(good_answer, tmp);
             cout << tmp << endl;
-            if (abs(tmp - good_answer) < 50 && tmp > 50 && L_check - stop_cond > 200)
-                break;
+            //if (abs(tmp - good_answer) < 50 && tmp > 50 && L_check - stop_cond > 200)
+            //    break;
             if (G_C::judge(ps)) {
                 ans_p = ps;
                 cout << "I got it!" << endl;
                 cout << L_check - stop_cond << endl;
                 return true;
             }
+            cout<<G_C::judge(ps)<<endl;
             P[++gene_size] = ps;
             G_C::optimize();
+
         }
+        cout<<"test"<<endl;
+        for(auto i:choose_point)
+            cout<<i<<" ";
+        cout<<endl;
     }
     return false;
 }
@@ -114,7 +122,7 @@ bool check(int x) {
 int main() {
     ios_base::sync_with_stdio(false);
     freopen("input.pcp", "r", stdin);
-    freopen("output.txt", "w", stdout);
+    //freopen("output.txt", "w", stdout);
     init();
     P_P::init_point(init_size, con_p, p);
     //int l = 1, r = p;

@@ -27,6 +27,7 @@
 #define E  2.7182818285
 #define A 10
 #define arf 0.6
+#define Endl endl
 using namespace std;
 
 struct edge {

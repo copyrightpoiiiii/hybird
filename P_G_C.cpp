@@ -11,7 +11,7 @@ namespace P_P {
         PP.size = size;
         while (size--) {
             for (int i = 1; i <= num; i++)
-                PP.a[size].push_back(b[i][rand(1, (int) b[i].size())]);
+                PP.a[size].push_back(b[i][rand(0, (int) b[i].size()-1)]);
         }
     }
 
@@ -26,38 +26,50 @@ namespace P_P {
             p.push_back(0);
         }
         for (int i = 0; i < x.size(); i++) {
-            int min_dex = inf, choose_point = -1;
+            int min_dex = inf, choose_point = -1, all_dex = inf;
             for (int j = 0; j < a.size(); j++)
                 if (choose_side) {
-                    int poi = x[j], cnt = 0;
-                    for (int k = head[poi]; k; k = e[k].next)
+                    int poi = x[a[j]], cnt = 0, cnt2 = 0;
+                    for (int k = head[poi]; k; k = e[k].next) {
                         if (choose[e[k].go])
                             cnt++;
+                        cnt2++;
+                    }
                     if (cnt < min_dex) {
                         min_dex = cnt;
+                        all_dex = cnt2;
+                        choose_point = j;
+                    } else if (cnt == min_dex&&cnt2<all_dex) {
+                        all_dex = cnt2;
                         choose_point = j;
                     }
                 } else {
-                    int poi = y[j], cnt = 0;
-                    for (int k = head[poi]; k; k = e[k].next)
+                    int poi = y[a[j]], cnt = 0, cnt2 = 0;
+                    for (int k = head[poi]; k; k = e[k].next) {
                         if (choose[e[k].go])
                             cnt++;
+                        cnt2++;
+                    }
                     if (cnt < min_dex) {
                         min_dex = cnt;
+                        all_dex = cnt2;
+                        choose_point = j;
+                    } else if (cnt == min_dex&&cnt2<all_dex) {
+                        all_dex = cnt2;
                         choose_point = j;
                     }
                 }
             if (choose_point == -1)
                 return p;
             else {
-                a.erase(a.begin() + choose_point);
                 if (choose_side) {
-                    choose[x[choose_point]] = true;
-                    p[choose_point] = x[choose_point];
+                    choose[x[a[choose_point]]] = true;
+                    p[a[choose_point]] = x[a[choose_point]];
                 } else {
-                    choose[y[choose_point]] = true;
-                    p[choose_point] = y[choose_point];
+                    choose[y[a[choose_point]]] = true;
+                    p[a[choose_point]] = y[a[choose_point]];
                 }
+                a.erase(a.begin() + choose_point);
                 choose_side ^= 1;
             }
         }
@@ -160,7 +172,7 @@ namespace P_P {
     vector<int> find_point(int num) {
         default_random_engine e;
         e.seed((unsigned) time(nullptr));
-        uniform_int_distribution<int> u(1, PP.size);
+        uniform_int_distribution<int> u(1, PP.size-1);
         int x = u(e), y = u(e);
         while (y == x) {
             y = u(e);
