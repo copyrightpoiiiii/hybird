@@ -34,7 +34,7 @@ void swap(int a, int b) {
 
 int rand(int a, int b) {
     if (a < b)swap(a, b);
-    default_random_engine e_engine(static_cast<unsigned int>(time(nullptr)));
+    static default_random_engine e_engine(static_cast<unsigned int>(time(nullptr)));
     uniform_int_distribution<int> u(a, b);
     return u(e_engine);
 }
@@ -67,8 +67,8 @@ void init() {
 
 void output_gene(gene p) {
     cout << p.size << endl;
-    for (auto i:p.v) {
-        for (auto x:i.a)
+    for (int i=1;i<=p.size;i++) {
+        for (auto x:p.v[i].a)
             cout << x << " ";
         cout << endl;
     }
@@ -92,11 +92,8 @@ bool check(int x) {
             while(p1==p2)
                 p2=rand(1,init_size);
             gene ps;
-            cout<<"ss"<<endl;
             G_C::crossover(P[p1], P[p2], ps);
-            cout<<"sss"<<endl;
             G_C::localSearch(ps, L_LS);
-            cout<<"ssss"<<endl;
             int tmp = G_C::f(ps);
             good_answer = min(good_answer, tmp);
             cout << tmp << endl;
@@ -108,12 +105,9 @@ bool check(int x) {
                 cout << L_check - stop_cond << endl;
                 return true;
             }
-            cout<<G_C::judge(ps)<<endl;
             P[++gene_size] = ps;
             G_C::optimize();
-
         }
-        cout<<"test"<<endl;
         for(auto i:choose_point)
             cout<<i<<" ";
         cout<<endl;
@@ -127,6 +121,7 @@ int main() {
     freopen("input.pcp", "r", stdin);
     //freopen("output.txt", "w", stdout);
     init();
+
     P_P::init_point(init_size, con_p, p);
     //int l = 1, r = p;
     //while (l <= r) {

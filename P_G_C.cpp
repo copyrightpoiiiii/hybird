@@ -121,7 +121,7 @@ namespace P_P {
             else {
                 for (auto i:a)
                     if (pro[i] == pro[new_pri]) {
-                        for (int j = head[a[i]]; j; j = e[j].next)
+                        for (int j = head[i]; j; j = e[j].next)
                             if (choose_point[e[j].go]) {
                                 best_fun--;
                                 book_conflict[pro[e[j].go]]--;
@@ -133,6 +133,7 @@ namespace P_P {
                                 book_conflict[pro[e[j].go]]++;
                                 book_conflict[pro[new_pri]]++;
                             }
+                        i=new_pri;
                         tabutable[i] = iter - tl;
                     }
             }
