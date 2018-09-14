@@ -98,6 +98,8 @@ namespace P_P {
         int best_fun = find(a);
         int tabutable[maxn];
         memset(tabutable, 0x3f, sizeof(tabutable));
+        bool choose_point[maxn];
+        memset(choose_point, 0, sizeof(choose_point));
         for (auto i:a)
             choose_point[i] = true;
         while (iter--) {
@@ -106,7 +108,7 @@ namespace P_P {
             for (int i = 1; i <= n; i++)
                 if (!choose_point[i] && tabutable[i] >= iter) {
                     int cnt = 0;
-                    for (int j = head[i]; j; j = e[j].go)
+                    for (int j = head[i]; j; j = e[j].next)
                         if (choose_point[e[j].go])
                             cnt++;
                     if (book_conflict[pro[i]] - cnt > new_pri_f) {
@@ -148,12 +150,12 @@ namespace P_P {
 
     void optimize() {
         long double s_gene[PP.size + 5];
-        for (int i = 1; i <= PP.size; i++)
+        for (int i = 0; i <= PP.size; i++)
             s_gene[i] = find(PP.a[i]);
         int min_dis[maxn];
         memset(min_dis, 0x3f, sizeof(min_dis));
-        for (int i = 1; i <= PP.size; i++)
-            for (int j = 1; j <= PP.size; j++)
+        for (int i = 0; i < PP.size; i++)
+            for (int j = 0; j < PP.size; j++)
                 if (i != j)
                     min_dis[i] = min(min_dis[i], dis(PP.a[i], PP.a[j]));
         long double max_index = 0;
@@ -177,7 +179,7 @@ namespace P_P {
         while (y == x) {
             y = u(e);
         }
-        PP.a[++PP.size] = localSearch(crossover(PP.a[x], PP.a[y]), L_LS);
+        PP.a[PP.size] = localSearch(crossover(PP.a[x], PP.a[y]), 100);
         vector<int> tmp = PP.a[PP.size];
         optimize();
         return tmp;

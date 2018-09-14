@@ -18,7 +18,7 @@ namespace G_C {
                 book_point.push_back(j);
             P[i].size = 0;
             for (int j = 1; j <= p; j++) {
-                int t = rand(0, (int) book_point.size());
+                int t = rand(0, (int) book_point.size()-1);
                 int x = choose_point[book_point[t]];
                 book_point.erase(book_point.begin() + t);
                 memset(vispoint, 0, sizeof(vispoint));

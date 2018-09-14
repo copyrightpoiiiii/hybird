@@ -28,6 +28,7 @@
 #define A 10
 #define arf 0.6
 #define Endl endl
+#define DEBUG(x) cout<<x<<endl
 using namespace std;
 
 struct edge {

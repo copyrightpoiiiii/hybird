@@ -79,9 +79,7 @@ bool check(int x) {
     int best_answer = p * p;
     while (stop_check--) {
         choose_point = P_P::find_point(p2);
-        cout<<"ss"<<endl;
         G_C::init_gen(x, init_size);
-        cout<<"ssss"<<endl;
         int stop_cond = L_check;
         for (int i = 1; i <= init_size; i++)
             if (G_C::judge(P[i])) {
@@ -91,9 +89,14 @@ bool check(int x) {
         int good_answer = p * p;
         while (stop_cond--) {
             int p1 = rand(1, init_size), p2 = rand(1, init_size);
+            while(p1==p2)
+                p2=rand(1,init_size);
             gene ps;
+            cout<<"ss"<<endl;
             G_C::crossover(P[p1], P[p2], ps);
+            cout<<"sss"<<endl;
             G_C::localSearch(ps, L_LS);
+            cout<<"ssss"<<endl;
             int tmp = G_C::f(ps);
             good_answer = min(good_answer, tmp);
             cout << tmp << endl;

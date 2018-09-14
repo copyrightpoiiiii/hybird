@@ -19,6 +19,8 @@ extern vector<int> con_p[maxp];
 
 extern int rand(int a, int b);
 
+extern void output_gene(gene p);
+
 namespace G_C {
     void init_gen(int lim, int size);
 
