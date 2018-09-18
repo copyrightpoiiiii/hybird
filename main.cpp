@@ -67,7 +67,7 @@ void init() {
 
 void output_gene(gene p) {
     cout << p.size << endl;
-    for (int i=1;i<=p.size;i++) {
+    for (int i = 1; i <= p.size; i++) {
         for (auto x:p.v[i].a)
             cout << x << " ";
         cout << endl;
@@ -89,14 +89,14 @@ bool check(int x) {
         int good_answer = p * p;
         while (stop_cond--) {
             int p1 = rand(1, init_size), p2 = rand(1, init_size);
-            while(p1==p2)
-                p2=rand(1,init_size);
+            while (p1 == p2)
+                p2 = rand(1, init_size);
             gene ps;
             G_C::crossover(P[p1], P[p2], ps);
             G_C::localSearch(ps, L_LS);
             int tmp = G_C::f(ps);
             good_answer = min(good_answer, tmp);
-            cout << tmp << endl;
+            cout << "conflict: " << tmp << endl;
             //if (abs(tmp - good_answer) < 50 && tmp > 50 && L_check - stop_cond > 200)
             //    break;
             if (G_C::judge(ps)) {
@@ -108,9 +108,9 @@ bool check(int x) {
             P[++gene_size] = ps;
             G_C::optimize();
         }
-        for(auto i:choose_point)
-            cout<<i<<" ";
-        cout<<endl;
+        for (auto i:choose_point)
+            cout << i << " ";
+        cout << endl;
     }
     return false;
 }
@@ -119,7 +119,7 @@ bool check(int x) {
 int main() {
     ios_base::sync_with_stdio(false);
     freopen("input.pcp", "r", stdin);
-    //freopen("output.txt", "w", stdout);
+    freopen("output.txt", "w", stdout);
     init();
 
     P_P::init_point(init_size, con_p, p);
@@ -128,7 +128,7 @@ int main() {
     //  int mid = (l + r) >> 1;
     //color_size = mid;
     //cout << mid << endl;
-    check(50);
+    check(49);
     //if (check(mid))r = mid - 1;
     //else l = mid + 1;
     //}

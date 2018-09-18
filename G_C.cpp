@@ -10,7 +10,7 @@ namespace G_C {
                 P[i].v[j].a.clear();
         }
         bool vispoint[maxn];
-        memset(vispoint,0,sizeof(vispoint));
+        memset(vispoint, 0, sizeof(vispoint));
         gene_size = size;
         vector<int> book_point;
         for (int i = 1; i <= size; i++) {
@@ -19,7 +19,7 @@ namespace G_C {
                 book_point.push_back(j);
             P[i].size = 0;
             for (int j = 1; j <= p; j++) {
-                int t = rand(0, (int) book_point.size()-1);
+                int t = rand(0, (int) book_point.size() - 1);
                 int x = choose_point[book_point[t]];
                 book_point.erase(book_point.begin() + t);
                 for (int k = head[x], y; k; k = e[k].next) {
@@ -27,7 +27,7 @@ namespace G_C {
                     vispoint[y] = true;
                 }
                 int flag = 0;
-                for (int k=1;k<=P[i].size;k++) {
+                for (int k = 1; k <= P[i].size; k++) {
                     int flaggro = 0;
                     for (auto q:P[i].v[k].a) {
                         if (vispoint[q]) {

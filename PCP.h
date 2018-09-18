@@ -62,6 +62,6 @@ struct point_set {
     vector<int> a[maxn];
 
     point_set() { size = 0; }
-} ;
+};
 
 #endif //HYBIRD_PCP_H

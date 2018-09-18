@@ -9,9 +9,33 @@ int book_conflict[maxn];
 namespace P_P {
     void init_point(int size, vector<int> *b, int num) {
         PP.size = size;
+        bool record_point[maxp];
+        int rec_poi[maxn];
+        vector<int> poi;
+        int i = 1;
         while (size--) {
-            for (int i = 1; i <= num; i++)
-                PP.a[size].push_back(b[i][rand(0, (int) b[i].size()-1)]);
+            for (i = 1; i <= num; i++)
+                poi.push_back(i);
+            memset(record_point, 0, sizeof(record_point));
+            while (!poi.empty()) {
+                i = rand(0, (int) poi.size() - 1);
+                int po = -1, rec_num = inf;
+                for (auto j:b[poi[i]]) {
+                    //cout<<j<<endl;
+                    int rec_num_tmp = 0;
+                    for (int k = head[j]; k; k = e[k].next)
+                        if (record_point[e[k].go])
+                            rec_num_tmp++;
+                    if (rec_num_tmp < rec_num) {
+                        rec_num = rec_num_tmp;
+                        po = j;
+                    }
+                }
+                record_point[po]=true;
+                rec_poi[poi[i]] = po;
+                poi.erase(poi.begin() + i);
+            }
+            PP.a[size].insert(PP.a[size].begin(), rec_poi + 1, rec_poi + p + 1);
         }
     }
 
@@ -39,7 +63,7 @@ namespace P_P {
                         min_dex = cnt;
                         all_dex = cnt2;
                         choose_point = j;
-                    } else if (cnt == min_dex&&cnt2<all_dex) {
+                    } else if (cnt == min_dex && cnt2 < all_dex) {
                         all_dex = cnt2;
                         choose_point = j;
                     }
@@ -54,7 +78,7 @@ namespace P_P {
                         min_dex = cnt;
                         all_dex = cnt2;
                         choose_point = j;
-                    } else if (cnt == min_dex&&cnt2<all_dex) {
+                    } else if (cnt == min_dex && cnt2 < all_dex) {
                         all_dex = cnt2;
                         choose_point = j;
                     }
@@ -90,7 +114,7 @@ namespace P_P {
                     book_conflict[pro[e[i].go]]++;
                     sum++;
                 }
-        return sum;
+        return sum/2;
     }
 
     vector<int> localSearch(vector<int> a, int iter) {
@@ -133,7 +157,7 @@ namespace P_P {
                                 book_conflict[pro[e[j].go]]++;
                                 book_conflict[pro[new_pri]]++;
                             }
-                        i=new_pri;
+                        i = new_pri;
                         tabutable[i] = iter - tl;
                     }
             }
@@ -152,7 +176,7 @@ namespace P_P {
     void optimize() {
         long double s_gene[PP.size + 5];
         for (int i = 0; i <= PP.size; i++)
-            s_gene[i] = find(PP.a[i]);
+            s_gene[i] = find(PP.a[i]) / (p * p);
         int min_dis[maxn];
         memset(min_dis, 0x3f, sizeof(min_dis));
         for (int i = 0; i < PP.size; i++)
@@ -162,7 +186,7 @@ namespace P_P {
         long double max_index = 0;
         int max_id = PP.size;
         for (int i = 1; i <= PP.size; i++) {
-            s_gene[i] += pow(E, (long double) 0.08 * p * (long double) p / min_dis[i]);
+            s_gene[i] += min_dis[i] / p;
             if (s_gene[i] > max_index) {
                 max_index = s_gene[i];
                 max_id = i;
@@ -173,14 +197,14 @@ namespace P_P {
     }
 
     vector<int> find_point(int num) {
-        default_random_engine e;
-        e.seed((unsigned) time(nullptr));
-        uniform_int_distribution<int> u(1, PP.size-1);
-        int x = u(e), y = u(e);
+        for(int i=0;i<PP.size;i++)
+            cout<<"init_connect: "<<find(PP.a[i])<<endl;
+        int x = rand(0, PP.size - 1), y = rand(0, PP.size - 1);
         while (y == x) {
-            y = u(e);
+            y = rand(1, PP.size - 1);
         }
         PP.a[PP.size] = localSearch(crossover(PP.a[x], PP.a[y]), 100);
+        cout << "connext: " << find(PP.a[PP.size]) << endl;
         vector<int> tmp = PP.a[PP.size];
         optimize();
         return tmp;
