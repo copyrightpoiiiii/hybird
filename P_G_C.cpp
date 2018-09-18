@@ -110,7 +110,6 @@ namespace P_P {
         for (auto j:a)
             for (int i = head[j]; i; i = e[i].next)
                 if (choose_point[e[i].go]) {
-                    book_conflict[pro[j]]++;
                     book_conflict[pro[e[i].go]]++;
                     sum++;
                 }
@@ -132,9 +131,9 @@ namespace P_P {
                 if (!choose_point[i] && tabutable[i] >= iter) {
                     int cnt = 0;
                     for (int j = head[i]; j; j = e[j].next)
-                        if (choose_point[e[j].go] && pro[e[j].go]!=pro[i])
+                        if (choose_point[e[j].go] && pro[e[j].go] != pro[i])
                             cnt++;
-                    if (book_conflict[pro[i]] - cnt > new_pri_f) {
+                    if (book_conflict[pro[i]] - cnt >= new_pri_f) {
                         new_pri = i;
                         new_pri_f = book_conflict[pro[i]] - cnt;
                     }
@@ -142,7 +141,7 @@ namespace P_P {
             if (new_pri == -1)
                 return a;
             else {
-                int i=a[pro[new_pri]];
+                int i = a[pro[new_pri]];
                 for (int j = head[i]; j; j = e[j].next)
                     if (choose_point[e[j].go]) {
                         best_fun--;
@@ -160,7 +159,6 @@ namespace P_P {
                 choose_point[new_pri] = true;
                 a[pro[new_pri]] = new_pri;
             }
-            cout << find(a) << endl;
         }
         return a;
     }
