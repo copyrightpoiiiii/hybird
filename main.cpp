@@ -117,6 +117,7 @@ bool check(int x) {
 
 
 int main() {
+    auto st = clock();
     ios_base::sync_with_stdio(false);
     freopen("input.pcp", "r", stdin);
     freopen("output.txt", "w", stdout);
@@ -128,11 +129,12 @@ int main() {
     //  int mid = (l + r) >> 1;
     //color_size = mid;
     //cout << mid << endl;
-    check(49);
+    check(48);
     //if (check(mid))r = mid - 1;
     //else l = mid + 1;
     //}
     if (G_C::judge(ans_p))
         output_gene(ans_p);
+    cout << clock() - st << endl;
     return 0;
 }

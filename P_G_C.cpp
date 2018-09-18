@@ -31,11 +31,11 @@ namespace P_P {
                         po = j;
                     }
                 }
-                record_point[po]=true;
+                record_point[po] = true;
                 rec_poi[poi[i]] = po;
                 poi.erase(poi.begin() + i);
             }
-            PP.a[size].insert(PP.a[size].begin(), rec_poi + 1, rec_poi + p + 1);
+            PP.a[size].insert(PP.a[size].begin(), rec_poi, rec_poi + p + 1);
         }
     }
 
@@ -114,11 +114,10 @@ namespace P_P {
                     book_conflict[pro[e[i].go]]++;
                     sum++;
                 }
-        return sum/2;
+        return sum / 2;
     }
 
     vector<int> localSearch(vector<int> a, int iter) {
-        vector<int> best_point = a;
         int best_fun = find(a);
         int tabutable[maxn];
         memset(tabutable, 0x3f, sizeof(tabutable));
@@ -133,7 +132,7 @@ namespace P_P {
                 if (!choose_point[i] && tabutable[i] >= iter) {
                     int cnt = 0;
                     for (int j = head[i]; j; j = e[j].next)
-                        if (choose_point[e[j].go])
+                        if (choose_point[e[j].go] && pro[e[j].go]!=pro[i])
                             cnt++;
                     if (book_conflict[pro[i]] - cnt > new_pri_f) {
                         new_pri = i;
@@ -141,28 +140,29 @@ namespace P_P {
                     }
                 }
             if (new_pri == -1)
-                return best_point;
+                return a;
             else {
-                for (auto i:a)
-                    if (pro[i] == pro[new_pri]) {
-                        for (int j = head[i]; j; j = e[j].next)
-                            if (choose_point[e[j].go]) {
-                                best_fun--;
-                                book_conflict[pro[e[j].go]]--;
-                            }
-                        book_conflict[pro[i]] = 0;
-                        for (int j = head[new_pri]; j; j = e[j].next)
-                            if (choose_point[e[j].go]) {
-                                best_fun--;
-                                book_conflict[pro[e[j].go]]++;
-                                book_conflict[pro[new_pri]]++;
-                            }
-                        i = new_pri;
-                        tabutable[i] = iter - tl;
+                int i=a[pro[new_pri]];
+                for (int j = head[i]; j; j = e[j].next)
+                    if (choose_point[e[j].go]) {
+                        best_fun--;
+                        book_conflict[pro[e[j].go]]--;
                     }
+                book_conflict[pro[i]] = 0;
+                choose_point[i] = false;
+                tabutable[i] = iter - tl;
+                for (int j = head[new_pri]; j; j = e[j].next)
+                    if (choose_point[e[j].go]) {
+                        best_fun++;
+                        book_conflict[pro[e[j].go]]++;
+                        book_conflict[pro[new_pri]]++;
+                    }
+                choose_point[new_pri] = true;
+                a[pro[new_pri]] = new_pri;
             }
+            cout << find(a) << endl;
         }
-        return best_point;
+        return a;
     }
 
     int dis(vector<int> x, vector<int> y) {
@@ -197,12 +197,14 @@ namespace P_P {
     }
 
     vector<int> find_point(int num) {
-        for(int i=0;i<PP.size;i++)
-            cout<<"init_connect: "<<find(PP.a[i])<<endl;
+        for (int i = 0; i < PP.size; i++)
+            cout << "init_connect: " << find(PP.a[i]) << endl;
         int x = rand(0, PP.size - 1), y = rand(0, PP.size - 1);
         while (y == x) {
             y = rand(1, PP.size - 1);
         }
+        PP.a[PP.size] = crossover(PP.a[x], PP.a[y]);
+        cout << "connext: " << find(PP.a[PP.size]) << endl;
         PP.a[PP.size] = localSearch(crossover(PP.a[x], PP.a[y]), 100);
         cout << "connext: " << find(PP.a[PP.size]) << endl;
         vector<int> tmp = PP.a[PP.size];
