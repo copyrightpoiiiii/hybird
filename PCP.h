@@ -29,6 +29,7 @@
 #define arf 0.6
 #define Endl endl
 #define ednl endl
+#define extren extern
 #define DEBUG(x) cout<<x<<endl
 using namespace std;
 

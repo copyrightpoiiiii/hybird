@@ -18,8 +18,12 @@ extern int tabutable[maxn][maxn], conflict_color[maxn][maxn];
 extern int head[maxn], p_color_point[maxp], pro[maxn], book_color[maxn];
 extern vector<int> choose_point;
 extern vector<int> con_p[maxp];
+extern int array_form_1_to_n[maxn];
+extern bool choose_point_bool[maxn];
 
 extern int rand(int a, int b);
+
+extern pair<int, int> find_connect_point(int x);
 
 namespace P_P {
 

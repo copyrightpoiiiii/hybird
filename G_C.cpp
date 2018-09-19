@@ -14,9 +14,7 @@ namespace G_C {
         gene_size = size;
         vector<int> book_point;
         for (int i = 1; i <= size; i++) {
-            book_point.clear();
-            for (int j = 1; j <= p; j++)
-                book_point.push_back(j);
+            book_point.insert(book_point.begin(), array_form_1_to_n + 1, array_form_1_to_n + 1 + p);
             P[i].size = 0;
             for (int j = 1; j <= p; j++) {
                 int t = rand(0, (int) book_point.size() - 1);

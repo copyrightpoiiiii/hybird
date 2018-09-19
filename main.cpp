@@ -8,6 +8,8 @@ gene P[30], ans_p;
 int nb_CFL, tot, m, n, p, p2, gene_size, color_size;
 int tabutable[maxn][maxn], conflict_color[maxn][maxn];
 int head[maxn], p_color_point[maxp], pro[maxn], book_color[maxn];
+int array_form_1_to_n[maxn];
+bool choose_point_bool[maxn];
 vector<int> choose_point;
 vector<int> con_p[maxp];
 point_set PP;
@@ -55,6 +57,7 @@ void init() {
         int j = read() + 1;
         con_p[j].push_back(i);
         pro[i] = j;
+        array_form_1_to_n[i] = i;
     }
     for (int i = 1; i <= m; i++) {
         int u = read() + 1, v = read() + 1;
@@ -64,10 +67,22 @@ void init() {
     p2 = p;
 }
 
+pair<int, int> find_connect_point(int x) {
+    pair<int, int> cnt;
+    for (int i = head[x]; i; i = e[i].next)
+        if (pro[e[i].go] != pro[x]) {
+            if (choose_point_bool[e[i].go])
+                cnt.first++;
+            cnt.second++;
+        }
+    return cnt;
+}
+
 
 void output_gene(gene p) {
     cout << p.size << endl;
     for (int i = 1; i <= p.size; i++) {
+        cout << p.v[i].a.size() << " ";
         for (auto x:p.v[i].a)
             cout << x << " ";
         cout << endl;
@@ -96,7 +111,7 @@ bool check(int x) {
             G_C::localSearch(ps, L_LS);
             int tmp = G_C::f(ps);
             good_answer = min(good_answer, tmp);
-            cout << "conflict: " << tmp << endl;
+            //cout << "conflict: " << tmp << endl;
             //if (abs(tmp - good_answer) < 50 && tmp > 50 && L_check - stop_cond > 200)
             //    break;
             if (G_C::judge(ps)) {
