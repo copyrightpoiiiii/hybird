@@ -193,12 +193,17 @@ namespace P_P {
     }
 
     vector<int> find_point(int num) {
-        for (int i = 0; i < PP.size; i++)
-            cout << "init_connect: " << find(PP.a[i]) << endl;
+       // for (int i = 0; i < PP.size; i++)
+       //     cout << "init_connect: " << find(PP.a[i]) << endl;
+        cout<<p<<endl;
+        for(int i=0;i<PP.size;i++)
+            for(int j=0;j<PP.size;j++)
+                if(i!=j)
+                    cout<<i<<" "<<j<<" "<<dis(PP.a[i],PP.a[j])<<endl;
         int x = rand(0, PP.size - 1), y = rand(0, PP.size - 1);
         while (y == x)
             y = rand(0, PP.size - 1);
-        PP.a[PP.size] = localSearch(crossover(PP.a[x], PP.a[y]), 1000);
+        PP.a[PP.size] = localSearch(PP.a[x],1000);
         cout << "connect: " << find(PP.a[PP.size]) << endl;
         vector<int> tmp = PP.a[PP.size];
         optimize();
