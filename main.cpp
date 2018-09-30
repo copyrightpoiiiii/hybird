@@ -102,6 +102,7 @@ bool check(int x) {
                 return true;
             }
         int good_answer = p * p;
+            cout<<"s4"<<endl;
         while (stop_cond--) {
             int p1 = rand(1, init_size), p2 = rand(1, init_size);
             while (p1 == p2)
@@ -111,7 +112,7 @@ bool check(int x) {
             G_C::localSearch(ps, L_LS);
             int tmp = G_C::f(ps);
             good_answer = min(good_answer, tmp);
-            //cout << "conflict: " << tmp << endl;
+            cout << "conflict: " << tmp << endl;
             //if (abs(tmp - good_answer) < 50 && tmp > 50 && L_check - stop_cond > 200)
             //    break;
             if (G_C::judge(ps)) {
@@ -123,9 +124,7 @@ bool check(int x) {
             P[++gene_size] = ps;
             G_C::optimize();
         }
-        for (auto i:choose_point)
-            cout << i << " ";
-        cout << endl;
+        cout<<"s3"<<endl;
     }
     return false;
 }
@@ -137,7 +136,6 @@ int main() {
     freopen("input.pcp", "r", stdin);
     freopen("output.txt", "w", stdout);
     init();
-
     P_P::init_point(init_size, con_p, p);
     //int l = 1, r = p;
     //while (l <= r) {

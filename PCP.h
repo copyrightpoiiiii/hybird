@@ -25,6 +25,7 @@
 #define L_LS 500
 #define L_check 500
 #define E  2.7182818285
+#define P_LS 500
 #define A 10
 #define arf 0.6
 #define Endl endl

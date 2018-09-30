@@ -14,21 +14,11 @@ namespace P_P {
         vector<int> poi;
         int i = 1;
         while (size--) {
-            poi.insert(poi.begin(),array_form_1_to_n+1,array_form_1_to_n+num+1);
+            poi.insert(poi.begin(), array_form_1_to_n + 1, array_form_1_to_n + num + 1);
             memset(record_point, 0, sizeof(record_point));
             while (!poi.empty()) {
                 i = rand(0, (int) poi.size() - 1);
-                int po = -1, rec_num = inf;
-                for (auto j:b[poi[i]]) {
-                    int rec_num_tmp = 0;
-                    for (int k = head[j]; k; k = e[k].next)
-                        if (record_point[e[k].go])
-                            rec_num_tmp++;
-                    if (rec_num_tmp < rec_num) {
-                        rec_num = rec_num_tmp;
-                        po = j;
-                    }
-                }
+                int po = b[poi[i]][rand(0, (int) b[poi[i]].size() - 1)];
                 record_point[po] = true;
                 rec_poi[poi[i]] = po;
                 poi.erase(poi.begin() + i);
@@ -39,63 +29,61 @@ namespace P_P {
 
 
     vector<int> crossover(vector<int> x, vector<int> y) {
-        int choose_side = 0,choose_point[maxn];
+        int choose_side = 0, choose_point[maxn];
         memset(choose_point, 0, sizeof(choose_point));
-        bool choose[maxp],choose_poi[maxn];
-        memset(choose,0,sizeof(choose));
-        memset(choose_poi,0,sizeof(choose_poi));
-        vector<int> a,tmp;
-        a.clear();tmp.clear();
-        tmp.insert(tmp.begin(),array_form_1_to_n+1,array_form_1_to_n+x.size());
-        shuffle(tmp.begin(),tmp.end(),default_random_engine((unsigned int)time(nullptr)));
-        for(int i=0;i<tmp.size();i++){
-            int min_ind=inf,min_ind2=inf,poi=-1;
-            if(choose_side){
-                for(auto j:tmp)
-                    if(!choose[j]){
-                        int cnt=0,cnt2=0;
-                        for(int k=head[x[j]];k;k=e[k].next) {
+        bool choose[maxp], choose_poi[maxn];
+        memset(choose, 0, sizeof(choose));
+        memset(choose_poi, 0, sizeof(choose_poi));
+        vector<int> a, tmp;
+        a.clear();
+        tmp.clear();
+        tmp.insert(tmp.begin(), array_form_1_to_n + 1, array_form_1_to_n + x.size());
+        shuffle(tmp.begin(), tmp.end(), default_random_engine((unsigned int) time(nullptr)));
+        for (int i = 0; i < tmp.size(); i++) {
+            int min_ind = inf, min_ind2 = inf, poi = -1;
+            if (choose_side) {
+                for (auto j:tmp)
+                    if (!choose[j]) {
+                        int cnt = 0, cnt2 = 0;
+                        for (int k = head[x[j]]; k; k = e[k].next) {
                             if (choose_poi[e[k].go])
                                 cnt++;
                             cnt2++;
                         }
-                        if(cnt<min_ind){
-                            min_ind=cnt;
-                            min_ind2=cnt2;
-                            poi=x[j];
+                        if (cnt < min_ind) {
+                            min_ind = cnt;
+                            min_ind2 = cnt2;
+                            poi = x[j];
+                        } else if (cnt == min_ind && min_ind2 > cnt2) {
+                            min_ind2 = cnt2;
+                            poi = x[j];
                         }
-                        else if(cnt==min_ind&&min_ind2>cnt2){
-                            min_ind2=cnt2;
-                            poi=x[j];
-                        }
-                }
-            }
-            else{
-                for(auto j:tmp)
-                    if(!choose[j]){
-                        int cnt=0,cnt2=0;
-                        for(int k=head[y[j]];k;k=e[k].next) {
+                    }
+            } else {
+                for (auto j:tmp)
+                    if (!choose[j]) {
+                        int cnt = 0, cnt2 = 0;
+                        for (int k = head[y[j]]; k; k = e[k].next) {
                             if (choose_poi[e[k].go])
                                 cnt++;
                             cnt2++;
                         }
-                        if(cnt<min_ind){
-                            min_ind=cnt;
-                            min_ind2=cnt2;
-                            poi=y[j];
-                        }
-                        else if(cnt==min_ind&&min_ind2>cnt2){
-                            min_ind2=cnt2;
-                            poi=y[j];
+                        if (cnt < min_ind) {
+                            min_ind = cnt;
+                            min_ind2 = cnt2;
+                            poi = y[j];
+                        } else if (cnt == min_ind && min_ind2 > cnt2) {
+                            min_ind2 = cnt2;
+                            poi = y[j];
                         }
                     }
             }
-            choose_point[pro[poi]]=poi;
-            choose[pro[poi]]=true;
-            choose_poi[poi]=true;
-            choose_side^=1;
+            choose_point[pro[poi]] = poi;
+            choose[pro[poi]] = true;
+            choose_poi[poi] = true;
+            choose_side ^= 1;
         }
-        a.insert(a.begin(),choose_point,choose_point+x.size());
+        a.insert(a.begin(), choose_point, choose_point + x.size());
         return a;
     }
 
@@ -132,7 +120,7 @@ namespace P_P {
                     for (int j = head[i]; j; j = e[j].next)
                         if (choose_point[e[j].go] && pro[e[j].go] != pro[i])
                             cnt++;
-                    if (book_conflict[pro[i]] - cnt >= new_pri_f) {
+                    if (book_conflict[pro[i]] - cnt > new_pri_f) {
                         new_pri = i;
                         new_pri_f = book_conflict[pro[i]] - cnt;
                     }
@@ -176,14 +164,15 @@ namespace P_P {
             s_gene[i] = find(PP.a[i]);
         int min_dis[maxn];
         memset(min_dis, 0x3f, sizeof(min_dis));
-        for (int i = 0; i < PP.size; i++)
-            for (int j = 0; j < PP.size; j++)
-                if (i != j)
+        for (int i = 1; i <= PP.size; i++)
+            for (int j = 1; j <= PP.size; j++)
+                if (i != j) {
                     min_dis[i] = min(min_dis[i], dis(PP.a[i], PP.a[j]));
+                }
         long double max_index = 0;
         int max_id = PP.size;
-        for (int i = 1; i < PP.size; i++) {
-            s_gene[i] += (double)min_dis[i] *p/2;
+        for (int i = 1; i <= PP.size; i++) {
+            s_gene[i] += pow(E, (long double) 0.05 * p * (long double) p / min_dis[i]);
             if (s_gene[i] > max_index) {
                 max_index = s_gene[i];
                 max_id = i;
@@ -192,22 +181,75 @@ namespace P_P {
         PP.a[max_id] = PP.a[PP.size];
     }
 
+    bool cmp(pair<int, int> a, pair<int, int> b) {
+        return a.second > b.second;
+    }
+
+    vector<int> strategy_choose_point(vector<int> a) {
+        int tot = 0;
+        pair<int, int> book[maxn];
+        memset(book, 0, sizeof(book));
+        bool in_vector[maxn];
+        memset(in_vector, 0, sizeof(in_vector));
+        for (auto x:a)
+            in_vector[x] = true;
+        for (auto x:a) {
+            int cnt = 0;
+            for (int i = head[x]; i; i = e[i].next)
+                if (in_vector[e[i].go])
+                    cnt++;
+            book[++tot] = make_pair(tot, cnt);
+        }
+        sort(book + 1, book + tot + 1, cmp);
+        for (int i = 1; i <= p/2; i++) {
+            int up_bound = (int) con_p[pro[a[book[i].first]]].size() - 1;
+            int x = rand(0, up_bound);
+            while (a[book[i].first] == con_p[pro[a[book[i].first]]][x]&&up_bound)
+                x = rand(0, up_bound);
+            a[book[i].first] = con_p[pro[a[book[i].first]]][x];
+        }
+        return a;
+    }
+
+    vector<int> random_choose_point(vector<int> a) {
+        bool book[maxn];
+        memset(book, 0, sizeof(book));
+        for (int i = 1; i <= 100; i++) {
+            int x = rand(1, (int) a.size() - 1);
+            while (book[x])
+                x = rand(1, (int) a.size() - 1);
+            int y = rand(0, (int) con_p[pro[a[x]]].size() - 1);
+            while (con_p[pro[a[x]]][y] == a[x])
+                y = rand(0, (int) con_p[pro[a[x]]].size() - 1);
+            a[x] = con_p[pro[a[x]]][y];
+            book[x] = true;
+        }
+        return a;
+    }
+
     vector<int> find_point(int num) {
-       // for (int i = 0; i < PP.size; i++)
-       //     cout << "init_connect: " << find(PP.a[i]) << endl;
-        cout<<p<<endl;
-        for(int i=0;i<PP.size;i++)
-            for(int j=0;j<PP.size;j++)
-                if(i!=j)
-                    cout<<i<<" "<<j<<" "<<dis(PP.a[i],PP.a[j])<<endl;
-        int x = rand(0, PP.size - 1), y = rand(0, PP.size - 1);
-        while (y == x)
-            y = rand(0, PP.size - 1);
-        PP.a[PP.size] = localSearch(PP.a[x],1000);
-        cout << "connect: " << find(PP.a[PP.size]) << endl;
-        vector<int> tmp = PP.a[PP.size];
-        optimize();
-        return tmp;
+        int iter = P_LS, best_point = inf;
+        vector<int> tmp, ans;
+        while (iter--) {
+            int x = rand(0, PP.size - 1);
+            tmp = PP.a[x];
+            cout<<"the_connect_of_original_choose : "<<find(tmp)<<endl;
+            tmp = strategy_choose_point(tmp);
+            cout<<"the_connect_after_interference : "<<find(tmp)<<endl;
+            cout<<"the_distance_between_original_choose_and_ the_choose_after_interference: "<<dis(tmp,PP.a[x])<<endl;
+            PP.a[x] = localSearch(tmp, 1000);
+            cout<<"the_connect_after_local_search : "<<find(PP.a[x])<<endl;
+            cout<<"the_distance_between_original_choose_and_ the_choose_after_local_search : "<<dis(tmp,PP.a[x])<<endl;
+            if (find(PP.a[x]) < best_point) {
+                ans = PP.a[x];
+                best_point = find(PP.a[x]);
+            }
+            //optimize();
+            for(int i=1;i<PP.size;i++)
+                cout<<"test_contect : "<<find(PP.a[i])<<endl;
+        }
+        cout<<"fin_connect : "<<find(ans)<<endl;
+        return ans;
     }
 
 }
