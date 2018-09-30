@@ -1,0 +1,40 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/zhangqi/CLionProjects/hybird/PCP.h
+iostream
+-
+cstdio
+-
+cstdlib
+-
+cstring
+-
+string
+-
+vector
+-
+queue
+-
+ctime
+-
+cmath
+-
+random
+-
+algorithm
+-
+
+/Users/zhangqi/CLionProjects/hybird/P_G_C.cpp
+P_G_C.h
+/Users/zhangqi/CLionProjects/hybird/P_G_C.h
+
+/Users/zhangqi/CLionProjects/hybird/P_G_C.h
+PCP.h
+/Users/zhangqi/CLionProjects/hybird/PCP.h
+
