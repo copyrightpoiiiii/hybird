@@ -201,10 +201,10 @@ namespace P_P {
             book[++tot] = make_pair(tot, cnt);
         }
         sort(book + 1, book + tot + 1, cmp);
-        for (int i = 1; i <= p/2; i++) {
+        for (int i = 1; i <= p / 2; i++) {
             int up_bound = (int) con_p[pro[a[book[i].first]]].size() - 1;
             int x = rand(0, up_bound);
-            while (a[book[i].first] == con_p[pro[a[book[i].first]]][x]&&up_bound)
+            while (a[book[i].first] == con_p[pro[a[book[i].first]]][x] && up_bound)
                 x = rand(0, up_bound);
             a[book[i].first] = con_p[pro[a[book[i].first]]][x];
         }
@@ -233,23 +233,42 @@ namespace P_P {
         while (iter--) {
             int x = rand(0, PP.size - 1);
             tmp = PP.a[x];
-            cout<<"the_connect_of_original_choose : "<<find(tmp)<<endl;
+            cout << "the_connect_of_original_choose : " << find(tmp) << endl;
             tmp = strategy_choose_point(tmp);
-            cout<<"the_connect_after_interference : "<<find(tmp)<<endl;
-            cout<<"the_distance_between_original_choose_and_ the_choose_after_interference: "<<dis(tmp,PP.a[x])<<endl;
+            cout << "the_connect_after_interference : " << find(tmp) << endl;
+            cout << "the_distance_between_original_choose_and_ the_choose_after_interference: " << dis(tmp, PP.a[x])
+                 << endl;
             PP.a[x] = localSearch(tmp, 1000);
-            cout<<"the_connect_after_local_search : "<<find(PP.a[x])<<endl;
-            cout<<"the_distance_between_original_choose_and_ the_choose_after_local_search : "<<dis(tmp,PP.a[x])<<endl;
+            cout << "the_connect_after_local_search : " << find(PP.a[x]) << endl;
+            cout << "the_distance_between_original_choose_and_ the_choose_after_local_search : " << dis(tmp, PP.a[x])
+                 << endl;
             if (find(PP.a[x]) < best_point) {
                 ans = PP.a[x];
                 best_point = find(PP.a[x]);
             }
             //optimize();
-            for(int i=1;i<PP.size;i++)
-                cout<<"test_contect : "<<find(PP.a[i])<<endl;
+            for (int i = 1; i < PP.size; i++)
+                cout << "test_contect : " << find(PP.a[i]) << endl;
         }
-        cout<<"fin_connect : "<<find(ans)<<endl;
+        cout << "fin_connect : " << find(ans) << endl;
         return ans;
     }
 
+    vector<int> find_point_old(int num) {
+        // for (int i = 0; i < PP.size; i++)
+        //     cout << "init_connect: " << find(PP.a[i]) << endl;
+        cout << p << endl;
+        for (int i = 0; i < PP.size; i++)
+            for (int j = 0; j < PP.size; j++)
+                if (i != j)
+                    cout << i << " " << j << " " << dis(PP.a[i], PP.a[j]) << endl;
+        int x = rand(0, PP.size - 1);
+        PP.a[PP.size] = localSearch(PP.a[x], 1000);
+        cout << "connect: " << find(PP.a[PP.size]) << endl;
+        vector<int> tmp = PP.a[PP.size];
+        optimize();
+        return tmp;
+    }
+
 }
+
