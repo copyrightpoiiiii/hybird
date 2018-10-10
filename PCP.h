@@ -22,10 +22,10 @@
 #define maxp 2005
 #define maxm 400005
 #define init_size 10
-#define L_LS 500
-#define L_check 500
+#define L_LS 700
+#define L_check 700
 #define E  2.7182818285
-#define P_LS 500
+#define P_LS 200
 #define A 10
 #define arf 0.6
 #define Endl endl

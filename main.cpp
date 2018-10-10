@@ -95,7 +95,7 @@ bool check(int x) {
     while (stop_check--) {
         choose_point = P_P::find_point(p2);
         G_C::init_gen(x, init_size);
-        int stop_cond = L_check;
+        int stop_cond = 1;//L_check;
         for (int i = 1; i <= init_size; i++)
             if (G_C::judge(P[i])) {
                 ans_p = P[i];
@@ -109,7 +109,8 @@ bool check(int x) {
                 p2 = rand(1, init_size);
             gene ps;
             G_C::crossover(P[p1], P[p2], ps);
-            G_C::localSearch(ps, L_LS);
+            G_C::localSearch(ps, 1);
+            //G_C::localSearch(ps, L_LS);
             int tmp = G_C::f(ps);
             good_answer = min(good_answer, tmp);
             cout << "conflict: " << tmp << endl;
@@ -142,7 +143,7 @@ int main() {
     //  int mid = (l + r) >> 1;
     //color_size = mid;
     //cout << mid << endl;
-    check(48);
+    check(10);
     //if (check(mid))r = mid - 1;
     //else l = mid + 1;
     //}

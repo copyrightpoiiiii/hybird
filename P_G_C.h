@@ -42,6 +42,7 @@ namespace P_P {
 
     vector<int> find_point(int num);
 
+    vector<int> find_point_old(int num);
 
 }
 

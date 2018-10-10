@@ -185,7 +185,7 @@ namespace P_P {
         return a.second > b.second;
     }
 
-    vector<int> strategy_choose_point(vector<int> a) {
+    vector<int> strategy_choose_point(vector<int> a, int number) {
         int tot = 0;
         pair<int, int> book[maxn];
         memset(book, 0, sizeof(book));
@@ -201,7 +201,7 @@ namespace P_P {
             book[++tot] = make_pair(tot, cnt);
         }
         sort(book + 1, book + tot + 1, cmp);
-        for (int i = 1; i <= p / 2; i++) {
+        for (int i = 1; i <= number; i++) {
             int up_bound = (int) con_p[pro[a[book[i].first]]].size() - 1;
             int x = rand(0, up_bound);
             while (a[book[i].first] == con_p[pro[a[book[i].first]]][x] && up_bound)
@@ -211,15 +211,15 @@ namespace P_P {
         return a;
     }
 
-    vector<int> random_choose_point(vector<int> a) {
+    vector<int> random_choose_point(vector<int> a,int number) {
         bool book[maxn];
         memset(book, 0, sizeof(book));
-        for (int i = 1; i <= 100; i++) {
+        for (int i = 1; i <= number; i++) {
             int x = rand(1, (int) a.size() - 1);
-            while (book[x])
+            while (book[x] && (a.size() - 1))
                 x = rand(1, (int) a.size() - 1);
             int y = rand(0, (int) con_p[pro[a[x]]].size() - 1);
-            while (con_p[pro[a[x]]][y] == a[x])
+            while (con_p[pro[a[x]]][y] == a[x] && (con_p[pro[a[x]]].size() - 1))
                 y = rand(0, (int) con_p[pro[a[x]]].size() - 1);
             a[x] = con_p[pro[a[x]]][y];
             book[x] = true;
@@ -227,44 +227,41 @@ namespace P_P {
         return a;
     }
 
-    vector<int> find_point(int num) {
+    vector<int> find_point(int num)
+    {//加上随机扰动之后的选点程序
         int iter = P_LS, best_point = inf;
-        vector<int> tmp, ans;
+        vector<int> tmp, ans ,ori;
         while (iter--) {
-            int x = rand(0, PP.size - 1);
-            tmp = PP.a[x];
-            cout << "the_connect_of_original_choose : " << find(tmp) << endl;
-            tmp = strategy_choose_point(tmp);
-            cout << "the_connect_after_interference : " << find(tmp) << endl;
-            cout << "the_distance_between_original_choose_and_ the_choose_after_interference: " << dis(tmp, PP.a[x])
-                 << endl;
-            PP.a[x] = localSearch(tmp, 1000);
-            cout << "the_connect_after_local_search : " << find(PP.a[x]) << endl;
-            cout << "the_distance_between_original_choose_and_ the_choose_after_local_search : " << dis(tmp, PP.a[x])
-                 << endl;
-            if (find(PP.a[x]) < best_point) {
-                ans = PP.a[x];
-                best_point = find(PP.a[x]);
+            int x = rand(0, PP.size - 1), change_size = max(10, p / 10);
+            ori = PP.a[x];
+            while (1) {
+                tmp = PP.a[x];
+                tmp =  random_choose_point(tmp, change_size);//随机换点操作，可以更换为有选择性的换点操作
+                PP.a[x] = localSearch(tmp, 200);
+                cout << "the_connect_after_local_search : " << find(PP.a[x]) << endl;
+                if (find(PP.a[x]) < best_point) {
+                    ans = PP.a[x];
+                    best_point = find(PP.a[x]);
+                }
+                cout << "dis : " << dis(tmp, ori) << endl;
+                /*
+                 * 如果得到的解的距离较近或者解的质量不够好时，提升换点的个数
+                 */
+                if (dis(tmp, ori) <= min(100, p / 3) || abs(find(ori) - find(tmp)) < p / 5) {
+                    change_size += 10;
+                } else break;
+                if (change_size >= p)
+                    break;
             }
-            //optimize();
-            for (int i = 1; i < PP.size; i++)
-                cout << "test_contect : " << find(PP.a[i]) << endl;
+            cout << "fin_connect : " << find(ans) << endl;
         }
-        cout << "fin_connect : " << find(ans) << endl;
         return ans;
     }
 
-    vector<int> find_point_old(int num) {
-        // for (int i = 0; i < PP.size; i++)
-        //     cout << "init_connect: " << find(PP.a[i]) << endl;
-        cout << p << endl;
-        for (int i = 0; i < PP.size; i++)
-            for (int j = 0; j < PP.size; j++)
-                if (i != j)
-                    cout << i << " " << j << " " << dis(PP.a[i], PP.a[j]) << endl;
+    vector<int> find_point_old(int num)
+    {//无换点扰动
         int x = rand(0, PP.size - 1);
-        PP.a[PP.size] = localSearch(PP.a[x], 1000);
-        cout << "connect: " << find(PP.a[PP.size]) << endl;
+        PP.a[PP.size] = localSearch(PP.a[x], 200);
         vector<int> tmp = PP.a[PP.size];
         optimize();
         return tmp;
