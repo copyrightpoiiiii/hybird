@@ -7,17 +7,17 @@
 #ifndef HYBIRD_CHANGE_PINT_H
 #define HYBIRD_CHANGE_PINT_H
 
-#include "PCP.h"
+#include "Partition_Coloring_Problem.h"
 
-extern point_set PP;
-extern rec_point conflict_number[maxn];
+extern point_set Parition_Point_Set;
+extern rec_point point_tot_conflicts[maxn];
 extern edge e[2 * maxm];
 extern gene P[30], ans_p;
-extern int nb_CFL, tot, m, n, p, p2, gene_size, color_size;
+extern int nb_CFL, tot, m, n, partition_size, partition_size, gene_size, color_size;
 extern int tabutable[maxn][maxn], conflict_color[maxn][maxn];
-extern int head[maxn], p_color_point[maxp], pro[maxn], book_color[maxn];
+extern int head[maxn], p_color_point[maxp], partition_vertex_by_vertex[maxn], book_color[maxn];
 extern vector<int> choose_point;
-extern vector<int> con_p[maxp];
+extern vector<int> partition_vertex_by_group[maxp];
 extern int array_form_1_to_n[maxn];
 extern bool choose_point_bool[maxn];
 
@@ -25,10 +25,10 @@ extern int rand(int a, int b);
 
 extern pair<int, int> find_connect_point(int x);
 
-namespace P_P {
+namespace Partition_Problem {
 
 
-    void init_point(int size, vector<int> *b, int num);
+    void init_point_to_color (int size, vector<int> *b, int num);
 
     void crossover(vector<int> x, vector<int> y, vector<int> *p);
 

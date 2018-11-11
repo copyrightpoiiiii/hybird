@@ -1,9 +1,9 @@
 //
 // Created by 张淇 on 2018/9/2.
 //
-#include "G_C.h"
+#include "Graph_Coloring.h"
 
-namespace G_C {
+namespace Graph_Coloring_Problem {
     void init_gen(int lim, int size) {
         for (int i = 1; i <= gene_size; i++) {
             for (int j = 1; j <= P[i].size; j++)
@@ -14,10 +14,10 @@ namespace G_C {
         gene_size = size;
         vector<int> book_point;
         for (int i = 1; i <= size; i++) {
-            book_point.insert(book_point.begin(), array_form_1_to_n + 1, array_form_1_to_n + 1 + p);
+            book_point.insert(book_point.begin(), array_form_1_to_n + 1, array_form_1_to_n + 1 + partition_size);
+	        random_shuffle (book_point.begin (), book_point.end ());
             P[i].size = 0;
-            for (int j = 1; j <= p; j++) {
-                int t = rand(0, (int) book_point.size() - 1);
+            for (int t = book_point.size()-1; t >= 0; t--) {
                 int x = choose_point[book_point[t]];
                 book_point.erase(book_point.begin() + t);
                 for (int k = head[x], y; k; k = e[k].next) {
@@ -102,7 +102,7 @@ namespace G_C {
                 }
             }
         }
-        for (int i = 1; i <= p; i++)
+        for (int i = 1; i <= partition_size; i++)
             if (!book_point[choose_point[i]]) {
                 int x = rand(1, s.size);
                 s.v[x].a.push_back(choose_point[i]);
@@ -114,7 +114,7 @@ namespace G_C {
         for (int i = 1; i <= p.size; i++)
             for (int j = 0; j < p.v[i].a.size(); j++)
                 color[p.v[i].a[j]] = i;
-        for (int i = 1; i <= p2; i++)
+        for (int i = 1; i <= partition_size; i++)
             for (int j = head[choose_point[i]]; j; j = e[j].next)
                 if (color[e[j].go] == color[choose_point[i]])
                     return false;
@@ -127,7 +127,7 @@ namespace G_C {
         for (int i = 1; i <= p.size; i++)
             for (int j = 0; j < p.v[i].a.size(); j++)
                 color[p.v[i].a[j]] = i;
-        for (int i = 1; i <= p2; i++)
+        for (int i = 1; i <= partition_size; i++)
             for (int j = head[choose_point[i]]; j; j = e[j].next)
                 if (color[e[j].go] == color[choose_point[i]])
                     ans++;
@@ -135,23 +135,23 @@ namespace G_C {
     }
 
     void find(gene p) {
-        int color[maxn];
+        int point_color[maxn];
         nb_CFL = 0;
         memset(conflict_color, 0, sizeof(conflict_color));
         for (int i = 1; i <= p.size; i++)
             for (int j = 0; j < p.v[i].a.size(); j++) {
-                color[p.v[i].a[j]] = i;
-                conflict_number[p.v[i].a[j]].color = i;
+                point_color[p.v[i].a[j]] = i;
+                point_tot_conflicts[p.v[i].a[j]].color = i;
             }
-        for (int i = 1; i <= p2; i++) {
+        for (int i = 1; i <= partition_size; i++) {
             int x = choose_point[i];
-            conflict_number[x].sum = 0;
+            point_tot_conflicts[x].sum = 0;
             for (int j = head[x]; j; j = e[j].next) {
-                conflict_color[x][color[e[j].go]]++;
-                if (color[e[j].go] == color[x])
-                    conflict_number[x].sum++;
+                conflict_color[x][point_color[e[j].go]]++;
+                if (point_color[e[j].go] == point_color[x])
+                    point_tot_conflicts[x].sum++;
             }
-            nb_CFL += conflict_number[x].sum;
+            nb_CFL += point_tot_conflicts[x].sum;
         }
         nb_CFL /= 2;
     }
@@ -164,13 +164,13 @@ namespace G_C {
         while (iter--) {
             int tl, new_pri = -1, new_pri_f = n * n;
             tl = rand(0, A) + (int) (arf * nb_CFL);
-            int color_change, rec_id = 1;
-            for (int i = 1; i <= p2; i++)
-                if (conflict_number[choose_point[i]].sum > 0) {
+            int color_ori, rec_id = 0;
+            for (int i = 1; i <= partition_size; i++)
+                if (point_tot_conflicts[choose_point[i]].sum > 0) {
                     for (int j = 1; j <= p.size; j++)
-                        if (j != conflict_number[choose_point[i]].color && tabutable[choose_point[i]][j] >= iter) {
-                            if (conflict_number[choose_point[i]].sum - conflict_color[choose_point[i]][j] >
-                                conflict_number[rec_id].sum - new_pri_f) {
+                        if (j != point_tot_conflicts[choose_point[i]].color && tabutable[choose_point[i]][j] >= iter) {
+                            if (point_tot_conflicts[choose_point[i]].sum - conflict_color[choose_point[i]][j] >
+                                point_tot_conflicts[rec_id].sum - new_pri_f) {
                                 new_pri_f = conflict_color[choose_point[i]][j];
                                 new_pri = j;
                                 rec_id = choose_point[i];
@@ -181,27 +181,29 @@ namespace G_C {
                 p = best_res;
                 return;
             } else {
-                color_change = conflict_number[rec_id].color;
-                for (int j = 0; j < p.v[color_change].a.size(); j++)
-                    if (p.v[color_change].a[j] == rec_id)
-                        p.v[color_change].a.erase(p.v[color_change].a.begin() + j);
-                nb_CFL -= conflict_number[rec_id].sum;
+                color_ori = point_tot_conflicts[rec_id].color;
+                for (int j = 0; j < p.v[color_ori].a.size(); j++)
+                    if (p.v[color_ori].a[j] == rec_id) {
+                        p.v[color_ori].a[j]=p.v[color_ori].a[p.v[color_ori].a.size()-1];
+                        p.v[color_ori].a.erase (p.v[color_ori].a.begin () + p.v[color_ori].a.size()-1);
+                    }
+                nb_CFL -= point_tot_conflicts[rec_id].sum;
                 nb_CFL += new_pri_f;
                 for (int j = head[rec_id]; j; j = e[j].next) {
-                    if (conflict_number[e[j].go].color == color_change)
-                        conflict_number[e[j].go].sum--;
-                    else if (conflict_number[e[j].go].color == new_pri)
-                        conflict_number[e[j].go].sum++;
-                    conflict_color[e[j].go][color_change]--;
+                    if (point_tot_conflicts[e[j].go].color == color_ori)
+                        point_tot_conflicts[e[j].go].sum--;
+                    else if (point_tot_conflicts[e[j].go].color == new_pri)
+                        point_tot_conflicts[e[j].go].sum++;
+                    conflict_color[e[j].go][color_ori]--;
                     conflict_color[e[j].go][new_pri]++;
                 }
                 if (nb_CFL <= best_fun) {
                     best_fun = nb_CFL;
                     best_res = p;
                 }
-                tabutable[rec_id][color_change] = iter - tl;
-                conflict_number[rec_id].sum = new_pri_f;
-                conflict_number[rec_id].color = new_pri;
+                tabutable[rec_id][color_ori] = iter - tl;
+                point_tot_conflicts[rec_id].sum = new_pri_f;
+                point_tot_conflicts[rec_id].color = new_pri;
                 p.v[new_pri].a.push_back(rec_id);
                 if (!nb_CFL)
                     return;
@@ -225,7 +227,7 @@ namespace G_C {
             }
             sum += max_rec;
         }
-        return p - sum;
+        return partition_size - sum;
     }
 
     void optimize() {
@@ -242,7 +244,7 @@ namespace G_C {
         long double max_index = 0;
         int max_id = gene_size;
         for (int i = 1; i <= gene_size; i++) {
-            s_gene[i] += pow(E, (long double) 0.08 * p * (long double) p / min_dis[i]);
+            s_gene[i] += pow(E, (long double) 0.08 * partition_size * (long double) partition_size / min_dis[i]);
             if (s_gene[i] > max_index) {
                 max_index = s_gene[i];
                 max_id = i;
@@ -251,6 +253,41 @@ namespace G_C {
         P[max_id] = P[gene_size];
         gene_size--;
     }
+
+	bool graph_color(vector<int> point_set,int color_number){
+			choose_point = point_set;
+			Graph_Coloring_Problem::init_gen(color_number, POPULATION_SIZE);
+			int stop_cond = 10;//CHEAK_ITERATIONS;
+			for (int i = 1; i <= POPULATION_SIZE; i++)
+				if (Graph_Coloring_Problem::judge(P[i])) {
+					ans_p = P[i];
+					return true;
+				}
+			int good_answer = partition_size * partition_size;
+			while (stop_cond--) {
+				int p1 = rand(1, POPULATION_SIZE), p2 = rand(1, POPULATION_SIZE);
+				while (p1 == p2)
+					p2 = rand(1, POPULATION_SIZE);
+				gene ps;
+				Graph_Coloring_Problem::crossover(P[p1], P[p2], ps);
+				Graph_Coloring_Problem::localSearch(ps, GCP_LOCAL_SEARCH_ITER);
+				int tmp = Graph_Coloring_Problem::f(ps);
+				good_answer = min(good_answer, tmp);
+				//cout << "conflict: " << tmp << endl;
+				//if (abs(tmp - good_answer) < 50 && tmp > 50 && CHEAK_ITERATIONS - stop_cond > 200)
+				//    break;
+				if (Graph_Coloring_Problem::judge(ps)) {
+					ans_p = ps;
+					cout << "I got it!" << endl;
+					cout << CHEAK_ITERATIONS - stop_cond << endl;
+					return true;
+				}
+				//else cout<<Graph_Coloring_Problem::f(ps)<<endl;
+				P[++gene_size] = ps;
+				Graph_Coloring_Problem::optimize();
+			}
+			return false;
+		}
 }
 
 

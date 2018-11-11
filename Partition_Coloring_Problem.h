@@ -21,11 +21,11 @@
 #define maxn 2005
 #define maxp 2005
 #define maxm 400005
-#define init_size 10
-#define L_LS 700
-#define L_check 700
+#define POPULATION_SIZE 10
+#define GCP_LOCAL_SEARCH_ITER 700
+#define CHEAK_ITERATIONS 700
 #define E  2.7182818285
-#define P_LS 200
+#define PCP_LOCAL_SEARCH_ITER 200
 #define A 10
 #define arf 0.6
 #define Endl endl
@@ -64,6 +64,11 @@ struct point_set {
     vector<int> a[maxn];
 
     point_set() { size = 0; }
+};
+
+struct segtree{
+	int l,r;
+	pair<int,int> w;
 };
 
 #endif //HYBIRD_PCP_H

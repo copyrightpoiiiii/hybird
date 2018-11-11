@@ -1,18 +1,19 @@
-#include "PCP.h"
-#include "G_C.h"
-#include "P_G_C.h"
+#include "Partition_Coloring_Problem.h"
+#include "Graph_Coloring.h"
+#include "Partition_Graph_coloring.h"
+//#include "segtree_heap.h"
 
-rec_point conflict_number[maxn];
+rec_point point_tot_conflicts[maxn];
 edge e[2 * maxm];
 gene P[30], ans_p;
-int nb_CFL, tot, m, n, p, p2, gene_size, color_size;
+int nb_CFL, tot, m, n, partition_size, gene_size, color_size;
 int tabutable[maxn][maxn], conflict_color[maxn][maxn];
-int head[maxn], p_color_point[maxp], pro[maxn], book_color[maxn];
+int head[maxn], p_color_point[maxp], partition_vertex_by_vertex[maxn], book_color[maxn];
 int array_form_1_to_n[maxn];
 bool choose_point_bool[maxn];
 vector<int> choose_point;
-vector<int> con_p[maxp];
-point_set PP;
+vector<int> partition_vertex_by_group[maxp];
+point_set Parition_Point_Set;
 
 int read() {
     int x = 0, f = 1;
@@ -48,29 +49,26 @@ void insert(int u, int v) {
     head[v] = tot;
 }
 
-void init() {
+void input_graph_data () {
     n = read();
     m = read();
-    p = read();
-    //m /= 2;
+    partition_size = read();
     for (int i = 1; i <= n; i++) {
         int j = read() + 1;
-        con_p[j].push_back(i);
-        pro[i] = j;
+	    partition_vertex_by_group[j].push_back(i);
+	    partition_vertex_by_vertex[i] = j;
         array_form_1_to_n[i] = i;
     }
     for (int i = 1; i <= m; i++) {
         int u = read() + 1, v = read() + 1;
         insert(u, v);
     }
-    //p = read();
-    p2 = p;
 }
 
 pair<int, int> find_connect_point(int x) {
     pair<int, int> cnt;
     for (int i = head[x]; i; i = e[i].next)
-        if (pro[e[i].go] != pro[x]) {
+        if (partition_vertex_by_vertex[e[i].go] != partition_vertex_by_vertex[x]) {
             if (choose_point_bool[e[i].go])
                 cnt.first++;
             cnt.second++;
@@ -89,66 +87,35 @@ void output_gene(gene p) {
     }
 }
 
-bool check(int x) {
-    int stop_check = L_check;
-    int best_answer = p * p;
+bool check(int color_number) {
+    int stop_check = CHEAK_ITERATIONS;
+    int best_answer = partition_size * partition_size;
     while (stop_check--) {
-        choose_point = P_P::find_point(p2);
-        G_C::init_gen(x, init_size);
-        int stop_cond = 1;//L_check;
-        for (int i = 1; i <= init_size; i++)
-            if (G_C::judge(P[i])) {
-                ans_p = P[i];
-                return true;
-            }
-        int good_answer = p * p;
-            cout<<"s4"<<endl;
-        while (stop_cond--) {
-            int p1 = rand(1, init_size), p2 = rand(1, init_size);
-            while (p1 == p2)
-                p2 = rand(1, init_size);
-            gene ps;
-            G_C::crossover(P[p1], P[p2], ps);
-            G_C::localSearch(ps, 1);
-            //G_C::localSearch(ps, L_LS);
-            int tmp = G_C::f(ps);
-            good_answer = min(good_answer, tmp);
-            cout << "conflict: " << tmp << endl;
-            //if (abs(tmp - good_answer) < 50 && tmp > 50 && L_check - stop_cond > 200)
-            //    break;
-            if (G_C::judge(ps)) {
-                ans_p = ps;
-                cout << "I got it!" << endl;
-                cout << L_check - stop_cond << endl;
-                return true;
-            }
-            P[++gene_size] = ps;
-            G_C::optimize();
-        }
-        cout<<"s3"<<endl;
+        vector<int> coloring_point_set=Partition_Problem::find_point(partition_size);
+        if(Graph_Coloring_Problem::graph_color(coloring_point_set,color_number))
+            return true;
     }
     return false;
 }
 
 
 int main() {
-    auto st = clock();
     ios_base::sync_with_stdio(false);
     freopen("input.pcp", "r", stdin);
     freopen("output.txt", "w", stdout);
-    init();
-    P_P::init_point(init_size, con_p, p);
-    //int l = 1, r = p;
+	input_graph_data ();
+	Partition_Problem::init_point_to_color (POPULATION_SIZE, partition_vertex_by_group, partition_size);
+    //int l = 1, r = partition_size;
     //while (l <= r) {
     //  int mid = (l + r) >> 1;
     //color_size = mid;
     //cout << mid << endl;
-    check(10);
+    //cout<<"sss"<<endl;
+    check(7);
     //if (check(mid))r = mid - 1;
     //else l = mid + 1;
     //}
-    if (G_C::judge(ans_p))
+    if (Graph_Coloring_Problem::judge(ans_p))
         output_gene(ans_p);
-    cout << clock() - st << endl;
     return 0;
 }
