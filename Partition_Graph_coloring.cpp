@@ -159,7 +159,7 @@ namespace Partition_Problem {
 				point_set[partition_vertex_by_vertex[new_pri]] = new_pri;
 				if (new_pri_f > 0)
 					ans = point_set;
-				cout<<best_fun<<endl;
+				//cout<<best_fun<<endl;
 			}
 		}
 		return ans;
@@ -251,7 +251,7 @@ namespace Partition_Problem {
 		int ori_conflict = get_conflict (Parition_Point_Set.a[x]);
 		tmp = Parition_Point_Set.a[x];
 		while (iter--) {
-			tmp = localSearch (tmp, 100);
+			tmp = localSearch (tmp, 400);
 			int conflict = get_conflict (tmp);
 			if (conflict < mini_conflict) {
 				ans = tmp;
@@ -265,7 +265,7 @@ namespace Partition_Problem {
 			} else break;
 			if (change_size >= partition_size / 2)
 				break;
-			tmp = random_choose_point (tmp, change_size);//随机换点操作，可以更换为有选择性的换点操作
+			tmp = strategy_choose_point (tmp, change_size);//随机换点操作，可以更换为有选择性的换点操作
 		}
 		Parition_Point_Set.a[x] = ans;
 		cout << "fin_connect : " << get_conflict (ans) << endl;
