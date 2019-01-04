@@ -16,8 +16,9 @@ extern int tabutable[maxn][maxn], conflict_color[maxn][maxn];
 extern int head[maxn], p_color_point[maxp], partition_vertex_by_vertex[maxn], book_color[maxn];
 extern vector<int> choose_point;
 extern vector<int> partition_vertex_by_group[maxp];
-extern int array_form_1_to_n[maxn];
+extern int array_form_1_to_n[maxn],min_dis[maxn];
 extern bool choose_point_bool[maxn];
+extern long double s_gene[maxn];
 
 extern int rand(int a, int b);
 

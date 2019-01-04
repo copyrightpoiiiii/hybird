@@ -66,9 +66,4 @@ struct point_set {
     point_set() { size = 0; }
 };
 
-struct segtree{
-	int l,r;
-	pair<int,int> w;
-};
-
 #endif //HYBIRD_PCP_H
