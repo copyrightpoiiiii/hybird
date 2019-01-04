@@ -1,6 +1,15 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.12)
 project(hybird)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 
-add_executable(hybird main.cpp Partition_Graph_coloring.h Partition_Graph_coloring.cpp Graph_Coloring.h Graph_Coloring.cpp Partition_Coloring_Problem.h segtree_heap.h)
+include_directories(.)
+
+add_executable(hybird
+        Graph_Coloring.cpp
+        Graph_Coloring.h
+        main.cpp
+        Partition_Coloring_Problem.h
+        Partition_Graph_coloring.cpp
+        Partition_Graph_coloring.h
+        segtree_heap.h)
